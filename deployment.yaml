@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginxdeploy04
+   # tells deployment to run 2 pods matching the template
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+      - containerPort: 2001
+  - name: alpine
+    image: kjeevesh/sidecar3
+    volumeMounts: 
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
+    ports:
+      - containerPort: 2000
+    securityContext:
+      privileged: true
+      runAsUser: 0
+  volumes:
+    - name: docker-sock
+      hostPath: 
+        path: /var/run/docker.sock
+    
+
