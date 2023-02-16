@@ -1,17 +1,13 @@
-# Use a base image with the necessary tools and scripts
-FROM alpine:3.13
+from golang:1.19.5-alpine3.17
 
-# Set the working directory to /sidecar
-WORKDIR /hello-world
+run mkdir /webhooks
 
-# Copy the update management script into the container
-#COPY update_script.sh .
+workdir /webhooks
 
-# Make the script executable
-#RUN chmod +x update_script.sh
+copy . .
 
-RUN apk add --no-cache docker
-CMD ["tail","-f","/dev/null"]
+run go mod download
 
-# Set the default command to run the update management script
-#CMD ["./update_script.sh"]
+run go build -o ./webhooks_build
+
+cmd ["./webhooks_build"]
